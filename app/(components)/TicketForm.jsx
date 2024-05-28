@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const TicketForm = () => {
+  const router = useRouter();
+
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -14,8 +16,20 @@ const TicketForm = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log("submitted");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("/api/Tickets", {
+      method: "POST",
+      body: JSON.stringify({ formData }),
+      "content-type": "application/json",
+    });
+
+    if (!res.ok) {
+      throw new Error("Falha ao criar o Ticket.");
+    }
+
+    router.refresh();
+    router.push("/");
   };
 
   const startingTicketData = {
@@ -24,7 +38,7 @@ const TicketForm = () => {
     category: "Problema de Software",
     priority: 1,
     progress: 0,
-    status: "não iniciado",
+    status: "Em analise",
   };
 
   const [formData, setFormData] = useState(startingTicketData);
@@ -129,7 +143,7 @@ const TicketForm = () => {
         />
         <label>Status</label>
         <select name="status" value={formData.status} onChange={handleChange}>
-          <option value={"não iniciado"}>Não Iniciado</option>
+          <option value={"em analise"}>Em analise</option>
           <option value={"em andamento"}>Em andamento</option>
           <option value={"completo"}>Completo</option>
         </select>
