@@ -31,7 +31,7 @@ const PriorityDisplay = ({ priority }) => {
       <FontAwesomeIcon
         icon={faFire}
         className={` pr-1 ${
-          priority > 0 ? " text-red-400" : " text-slate-400"
+          priority > 4 ? " text-red-400" : " text-slate-400"
         }`}
       />
     </div>
